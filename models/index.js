@@ -1,3 +1,3 @@
 module.exports = {
-    People: require('./People')
-}
+  User: require('./User')
+};
