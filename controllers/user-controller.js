@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
 
   try {
     //
-    const newPerson = await User.create(req.body);
-    res.status(201).json(newPerson);
+    const newUser = await User.create(req.body);
+    res.status(201).json(newUser);
   } catch (err) {
     res.status(400).json({ error: err });
   }
@@ -39,8 +39,8 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   // res.status(200).json({message: "User show/get route /User/"+req.params.id})
   try {
-    const foundPerson = await User.findById(req.params.id);
-    res.status(200).json(foundPerson);
+    const foundUser = await User.findById(req.params.id);
+    res.status(200).json(foundUser);
   } catch (err) {
     res.status(400).json({ error: err });
   }
@@ -49,8 +49,8 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   // res.status(200).json({message: "User destroy/delete route /User/"+req.params.id})
   try {
-    const deletedPerson = await User.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedPerson);
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    res.status(200).json(deletedUser);
   } catch (err) {
     // console.log(err)
     res.status(400).json({ error: err });
@@ -61,12 +61,10 @@ router.delete('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // res.status(200).json({message: "User update/put route /User/"+req.params.id})
   try {
-    const updatedPerson = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.status(200).json(updatedPerson);
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    });
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(400).json({ error: err });
   }
