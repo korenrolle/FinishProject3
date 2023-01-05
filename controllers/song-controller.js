@@ -23,8 +23,8 @@ router.get('/', async (req, res) => {
 
 // http://localhost:4000/Song/
 router.post('/', async (req, res) => {
-  // console.log('post route', req.body)
-  // res.status(201).json({message: "Song create/post route"})
+  console.log('post route', req.body);
+  res.status(201).json({ message: 'Song create/post route' });
 
   try {
     //

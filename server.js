@@ -1,3 +1,5 @@
+require('dotenv').config();
+const { PORT } = process.env;
 const express = require('express');
 const app = express();
 
@@ -7,11 +9,9 @@ const morgan = require('morgan');
 
 // controller imports
 const userController = require('./controllers/user-controller');
+const songController = require('./controllers/song-controller');
 
-require('dotenv').config();
 require('./config/db.connection'); // node runs all of the code in db.connection
-
-const { PORT } = process.env;
 
 // express / app middleware
 app.use(express.json());
@@ -22,6 +22,7 @@ app.use(cors()); // allows for cross origin request - open channel
 app.use(morgan('dev'));
 // router middleware
 app.use('/user', userController);
+app.use('/song', songController);
 
 // root - home / index route for api - redirects to the user index route
 app.get('/', (req, res) => res.redirect('/user'));
