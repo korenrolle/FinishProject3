@@ -10,6 +10,8 @@ const morgan = require('morgan');
 // controller imports
 const userController = require('./controllers/user-controller');
 const songController = require('./controllers/song-controller');
+const reviewController = require('./controllers/review-controller');
+const likeController = require('./controllers/like-controller');
 
 require('./config/db.connection'); // node runs all of the code in db.connection
 
@@ -23,6 +25,8 @@ app.use(morgan('dev'));
 // router middleware
 app.use('/user', userController);
 app.use('/song', songController);
+app.use('/review', reviewController);
+app.use('/like', likeController);
 
 // root - home / index route for api - redirects to the user index route
 app.get('/', (req, res) => res.redirect('/user'));
