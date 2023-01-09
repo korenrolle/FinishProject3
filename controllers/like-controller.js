@@ -1,73 +1,53 @@
-const express = require('express');
-const router = express.Router();
+const mongoose = require('mongoose');
+const Like = mongoose.model('Like');
+const Post = mongoose.model('Post');
 
-// import model (Like)
-const { Like } = require('../models');
-
-const db = require('../models'); // db.Like
-// const Like = require('../models/Like')
-
-console.log(Like);
-
-// Routes
-// http://localhost:4000/Like/
-router.get('/', async (req, res) => {
-  // res.status(200).json({message: "Like index/get route"})
-  try {
-    const allLike = await Like.find({});
-    res.status(200).json(allLike);
-  } catch (err) {
-    res.status(400).json({ error: err });
+function likePost(req, res) {
+  // Validate the request
+  if (!req.body.postId || !req.body.userId) {
+    return res.status(400).send({ error: 'Invalid request' });
   }
-});
 
-// http://localhost:4000/Like/
-router.post('/', async (req, res) => {
-  console.log('post route', req.body);
-  res.status(201).json({ message: 'Like create/post route' });
+  // Check if the post already has a like from the user
+  Like.findOne(
+    {
+      user: req.body.userId,
+      post: req.body.postId
+    },
+    (error, like) => {
+      if (error) {
+        return res
+          .status(500)
+          .send({ error: 'Error checking for existing like' });
+      }
+      if (like) {
+        return res.status(400).send({ error: 'Post already liked by user' });
+      }
 
-  try {
-    //
-    const newLike = await Like.create(req.body);
-    res.status(201).json(newLike);
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
-});
+      // Like the post
+      const newLike = new Like({
+        user: req.body.userId,
+        post: req.body.postId
+      });
+      newLike.save((error) => {
+        if (error) {
+          return res.status(500).send({ error: 'Error saving like' });
+        }
 
-// http://localhost:4000/Like/:id - GET
-router.get('/:id', async (req, res) => {
-  // res.status(200).json({message: "Like show/get route /Like/"+req.params.id})
-  try {
-    const foundLike = await Like.findById(req.params.id);
-    res.status(200).json(foundLike);
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
-});
-// http://localhost:4000/Like/:id - DELETE
-router.delete('/:id', async (req, res) => {
-  // res.status(200).json({message: "Like destroy/delete route /Like/"+req.params.id})
-  try {
-    const deletedLike = await Like.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedLike);
-  } catch (err) {
-    // console.log(err)
-    res.status(400).json({ error: err });
-  }
-});
-
-// http://localhost:4000/Like/:id - PUT
-router.put('/:id', async (req, res) => {
-  // res.status(200).json({message: "Like update/put route /Like/"+req.params.id})
-  try {
-    const updatedLike = await Like.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
-    });
-    res.status(200).json(updatedLike);
-  } catch (err) {
-    res.status(400).json({ error: err });
-  }
-});
-
-module.exports = router;
+        // Update the post's like count
+        Post.findByIdAndUpdate(
+          req.body.postId,
+          { $inc: { likes: 1 } },
+          (error) => {
+            if (error) {
+              return res
+                .status(500)
+                .send({ error: 'Error updating post like count' });
+            }
+            return res.send({ message: 'Post liked successfully' });
+          }
+        );
+      });
+    }
+  );
+}

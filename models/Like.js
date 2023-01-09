@@ -1,11 +1,16 @@
-const likeSchema = new Schema({
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const likeSchema = new mongoose.Schema({
   user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
   post: {
-    type: Schema.Types.ObjectId,
-    ref: 'Post'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+    required: true
   },
   createdAt: {
     type: Date,
@@ -14,3 +19,4 @@ const likeSchema = new Schema({
 });
 
 const Like = mongoose.model('Like', likeSchema);
+module.exports = Like;

@@ -2,6 +2,7 @@ require('dotenv').config();
 const { PORT } = process.env;
 const express = require('express');
 const app = express();
+const Post = require('./models/');
 
 // app dependencies
 const cors = require('cors');
@@ -32,3 +33,20 @@ app.use('/like', likeController);
 app.get('/', (req, res) => res.redirect('/user'));
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+
+app.post('/posts/:postId/like', (req, res) => {
+  // Any authenticated user can like a post
+  const like = new Like({
+    user: req.user._id,
+    post: req.params.postId
+  });
+
+  like
+    .save()
+    .then(() => {
+      res.send({ message: 'Post liked.' });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: 'Error liking post.' });
+    });
+});
