@@ -1,25 +1,28 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const ReviewSchema = new mongoose.Schema(
-  {
-    rating: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 5
-    },
-    content: {
-      type: String,
-      required: [true, 'You must provide a reason for your review score.']
-    },
-    // relationship to product
-    song: {
-      type: mongoose.Types.ObjectId,
-      ref: 'Song'
-    }
+const reviewSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  { timestamps: true }
-);
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+    required: true
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-const Review = mongoose.model('Review', ReviewSchema);
-module.exports = Review;
+const Review = mongoose.model('Review', reviewSchema);
+module.exports;

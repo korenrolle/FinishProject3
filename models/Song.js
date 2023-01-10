@@ -4,13 +4,9 @@ const SongSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     artist: { type: String, required: true },
-    song: { type: Object, required: true },
+    song: { type: mongoose.SchemaTypes.String, required: true }, // Change to URL type
     description: { type: String, required: true },
     image: String
   },
   { timestamps: true }
 );
-
-const Song = mongoose.model('Song', SongSchema);
-
-module.exports = Song;

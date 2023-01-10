@@ -51,3 +51,4 @@ function likePost(req, res) {
     }
   );
 }
+module.exports = likePost;

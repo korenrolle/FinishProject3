@@ -1,4 +1,7 @@
-function createPost(req, res) {
+const Post = require('../models/Post');
+const router = require('express').Router();
+
+router.post('/', (req, res) => {
   // Validate the request
   if (!req.body.userId || !req.body.text) {
     return res.status(400).send({ error: 'Invalid request' });
@@ -15,4 +18,5 @@ function createPost(req, res) {
     }
     return res.send({ message: 'Post created successfully' });
   });
-}
+});
+module.exports = router;
