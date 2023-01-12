@@ -1,9 +1,9 @@
-const Post = require('../models/Post');
+const Post = require('../models/post');
 const router = require('express').Router();
 
 router.post('/', (req, res) => {
   // Validate the request
-  if (!req.body.userId || !req.body.text) {
+  if (!req.body.text) {
     return res.status(400).send({ error: 'Invalid request' });
   }
 
@@ -19,4 +19,14 @@ router.post('/', (req, res) => {
     return res.send({ message: 'Post created successfully' });
   });
 });
+
+router.get('/', async (req, res) => {
+  try {
+    const posts = await Post.find();
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
