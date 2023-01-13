@@ -1,36 +1,29 @@
 const express = require('express');
 const app = express();
 
-// Mongoose is a Object Data Modeling (ODM) library for
-// MongoDB distributed as an npm package.
-const mongoose = require('mongoose');
-
-// configures and gives access to .env file object
-
 // app dependencies
 const cors = require('cors');
 const morgan = require('morgan');
 
 // controller imports
 const postController = require('./controllers/post-controller');
-const commentController = require('./controllers/comment-controller');
 
-// database connection
-require('./config/db.connection');
 require('dotenv').config();
+require('./config/db.connection'); // node runs all of the code in db.connection
 
 const { PORT } = process.env;
 
-// middleware
+// express / app middleware
 app.use(express.json());
-app.use(cors());
+
+// cors helper function
+app.use(cors()); // allows for cross origin request - open channel
+// morgan request logger (for dev)
 app.use(morgan('dev'));
+// router middleware
+app.use('/post', postController);
 
-// routes
-app.use('/posts', postController);
+// root - home / index route for api - redirects to the post index route
+app.get('/', (req, res) => res.redirect('/post'));
 
-// root route
-// app.get('/', (req, res) => res.redirect('/Post'));
-
-// start server
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
