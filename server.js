@@ -7,7 +7,7 @@ const morgan = require('morgan');
 
 // controller imports
 const postController = require('./controllers/post-controller');
-
+const commentController = require('./controllers/comment-controller');
 require('dotenv').config();
 require('./config/db.connection'); // node runs all of the code in db.connection
 
@@ -22,6 +22,7 @@ app.use(cors()); // allows for cross origin request - open channel
 app.use(morgan('dev'));
 // router middleware
 app.use('/post', postController);
+app.use('/comment', commentController);
 
 // root - home / index route for api - redirects to the post index route
 app.get('/', (req, res) => res.redirect('/post'));

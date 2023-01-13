@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
 
-const commentSchema = new mongoose.Schema(
-  {
-    name: { type: String },
-    comment: String
-  },
-  { timestamps: true }
-);
+const commentSchema = new mongoose.Schema({
+  name: { type: String },
+  comment: String
+});
 
 const Comment = mongoose.model('Comment', commentSchema);
 
