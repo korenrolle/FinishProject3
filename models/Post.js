@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
-// const Schema = mongoose.Schema;
 
 const postSchema = new mongoose.Schema({
-  text: {
+  name: {
     type: String
   },
-  comments: [
-    {
-      type: String,
-      ref: 'Comment'
-    }
-  ]
+  image: {
+    type: String
+  },
+  title: {
+    type: String
+  }
 });
 const Post = mongoose.model('Post', postSchema);
 
